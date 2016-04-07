@@ -169,7 +169,7 @@ class DataRetrievalThread(threading.Thread):
         Starts execution of the thread
         """
         print("Starting " + self.name + " " + self.thread_id)
-        user_tweets(self.thread_id, self.api, self.db_reference.self.db_conf_list)
+        user_tweets(self.thread_id, self.api, self.db_reference, self.db_conf_list)
         print "Exiting " + self.name
 
 
