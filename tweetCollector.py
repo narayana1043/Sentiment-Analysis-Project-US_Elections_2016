@@ -190,15 +190,11 @@ if __name__ == '__main__':
     db = MongoServer(mongo_connection_string)
     database_name = 'tweetDB'
 
-    # # Extraction of tweets from a Twitter Account
-    # target_username = "SenSanders"
-    # user_tweets(target_username, tweepy_api, db, [database_name, target_username])
-
-    # # Extraction of tweets from multiple Twitter time-lines
-    # candidate_usernames = ['SenSanders', 'HillaryClinton', 'realDonaldTrump', 'tedcruz', 'JohnKasich']
-    # thread_list = [None] * len(candidate_usernames)
-    # for index, username in enumerate(candidate_usernames):
-    #     thread_list[index] = DataRetrievalThread(tweepy_api, db, [database_name, username], username)
-    #     thread_list[index].start()
+    # Extraction of tweets from multiple Twitter time-lines
+    candidate_usernames = ['SenSanders', 'HillaryClinton', 'realDonaldTrump', 'tedcruz', 'JohnKasich']
+    thread_list = [None] * len(candidate_usernames)
+    for index, username in enumerate(candidate_usernames):
+        thread_list[index] = DataRetrievalThread(tweepy_api, db, [database_name, username], username)
+        thread_list[index].start()
 
     db.close_connection()
