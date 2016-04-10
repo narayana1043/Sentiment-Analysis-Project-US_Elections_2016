@@ -41,7 +41,7 @@ if __name__=='__main__':
     hashtags=ExtractHashtags(tweetdict)
     hashfreq=CalcHashFreq(hashtags)
     #Writing out the frequencies to a file to be used later
-    with open('C:\Users\keshs\Desktop\HashFreq.csv','w') as file:
+    with open('Path_&_file.csv','w') as file:
         f=csv.writer(file)
         for i in hashfreq.keys():
             s=dict(hashfreq[i])
