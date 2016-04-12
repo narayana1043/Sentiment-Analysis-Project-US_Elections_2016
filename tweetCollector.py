@@ -32,7 +32,6 @@
 
 import threading
 import time
-
 import tweepy
 from pymongo import MongoClient
 import pymongo
@@ -101,10 +100,7 @@ class MongoServer:
         # If server connection is terminated, the connection is reset and tries to insert again
         try:
             mongo_col.insert_one(json_data)
-        except NetworkTimeout:
-            self.reset_client()
-            self.write_doc_to_collection(db_name, collection_name, json_data)
-        except ConnectionFailure:
+        except NetworkTimeout or ConnectionFailure:
             self.reset_client()
             self.write_doc_to_collection(db_name, collection_name, json_data)
 
@@ -196,6 +192,7 @@ def get_user_tweets(user_id, api, db_reference, db_conf_list):
 
 class DataRetrievalThread(threading.Thread):
     """
+    DataRetrievalThread is
     Thread class for retrieving tweets of multiple accounts in parallel
     """
 
@@ -226,17 +223,17 @@ class DataRetrievalThread(threading.Thread):
 
 if __name__ == '__main__':
     # Authentication Keys from Twitter App website
-    twitter_consumer_key = ''
-    twitter_consumer_secret_key = ''
-    twitter_access_token = ''
-    twitter_access_secret_token = ''
+    twitter_consumer_key = 'URKEq38uEfEBYJKhtJsulCkT3'
+    twitter_consumer_secret_key = 'R7Ura3hXyreftZsFlesQ0eMMUopxRbfvVxBG6qlbzDQH87MjD8'
+    twitter_access_token = '574211833-xxYFY0RXSDfgfpGCTV4MjLeyaKpfu1YWw8KOJSUP'
+    twitter_access_secret_token = '8NwigwWy8hcFaeEDMtQALQCRp1BUYUALruF68sFpR3ucr8NwigwWy8hcFaeEDMtQALQCRp1BUYUALruF68sFpR3ucr'
 
     # Creating API reference
     tweepy_api = authenticate_tweepy(twitter_consumer_key, twitter_consumer_secret_key, twitter_access_token,
                                      twitter_access_secret_token)
 
     # Connection string for MongoDB server access
-    mongo_connection_string = 'localhost:27017'
+    mongo_connection_string = 'mongodb://z604_final:lanif_406z@'
 
     db = MongoServer(mongo_connection_string)
     database_name = 'tweetDB'
