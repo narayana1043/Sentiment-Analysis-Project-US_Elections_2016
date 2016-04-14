@@ -3,12 +3,11 @@ import re
 import nltk
 import csv
 
-def ExtractTweets():
+def ExtractTweets(users):
     #Enter server details below:
-    client=MongoClient('Server details')
+    client=MongoClient('Server Details')
     db=client["tweetDB"]
     #Candidates tweets to extract from MongoDB
-    users=['HillaryClinton','JohnKasich','SenSanders','realDonaldTrump','tedcruz']
     td={}
     #Creating a dictionary to hold all the tweets from the presidential candidates
     for i in users:
@@ -37,11 +36,11 @@ def CalcHashFreq(ht):
     return hf
 
 if __name__=='__main__':
-    tweetdict=ExtractTweets()
+    tweetdict=ExtractTweets(['HillaryClinton','JohnKasich','SenSanders','realDonaldTrump','tedcruz'])
     hashtags=ExtractHashtags(tweetdict)
     hashfreq=CalcHashFreq(hashtags)
     #Writing out the frequencies to a file to be used later
-    with open('Path_&_file.csv','w') as file:
+    with open('File.csv','w') as file:
         f=csv.writer(file)
         for i in hashfreq.keys():
             s=dict(hashfreq[i])
