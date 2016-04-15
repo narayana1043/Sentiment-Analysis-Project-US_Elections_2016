@@ -1,32 +1,7 @@
-from pymongo import MongoClient
-import re
+from extract import *
 import nltk
 import csv
 
-def ExtractTweets(users):
-    #Enter server details below:
-    client=MongoClient('Server Details')
-    db=client["tweetDB"]
-    #Candidates tweets to extract from MongoDB
-    td={}
-    #Creating a dictionary to hold all the tweets from the presidential candidates
-    for i in users:
-        collection=db[i]
-        #We care only for english tweets, hence the language filter
-        td[i]=[tweet for tweet in collection.find({"lang":"en"})]
-    return td
-
-#Applying simple regular expressions to just extract all the hashtags from the tweets
-def ExtractHashtags(td):
-    Hashtags={}
-    for i in td.keys():
-        Hashtags[i]=[]
-        for j in range(len(td[i])):
-            y=re.sub('\\n','',td[i][j]['text'])
-            z=re.findall('#\w+',y)
-            for x in z:
-                Hashtags[i].append(x)
-    return Hashtags
 
 #Calculating the hashtags frequency over the whole set of tweets for each candidate separately
 def CalcHashFreq(ht):
@@ -36,7 +11,10 @@ def CalcHashFreq(ht):
     return hf
 
 if __name__=='__main__':
-    tweetdict=ExtractTweets(['HillaryClinton','JohnKasich','SenSanders','realDonaldTrump','tedcruz'])
+    electionCandidates = ['HillaryClinton','JohnKasich','SenSanders','realDonaldTrump','tedcruz']
+    tweetdict = {}
+    for candidate in electionCandidates:
+        tweetdict[candidate] = ExtractTweets(candidate)
     hashtags=ExtractHashtags(tweetdict)
     hashfreq=CalcHashFreq(hashtags)
     #Writing out the frequencies to a file to be used later
