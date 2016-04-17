@@ -1,11 +1,11 @@
 import re
 from pymongo import MongoClient
 
-def ExtractTweets(candidate):
+def ExtractTweets(collection_name):
     #Enter server details below:
     client=MongoClient('mongodb://z604_final:lanif_406z@45.33.57.4:27017/tweetDB')
     db=client["tweetDB"]
-    collection = db[candidate]
+    collection = db[collection_name]
     return [tweet for tweet in collection.find({"lang":"en"})]
 
 #Applying simple regular expressions to just extract all the hashtags from the tweets
