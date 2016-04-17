@@ -3,7 +3,7 @@ from pymongo import MongoClient
 
 def ExtractTweets(collection_name):
     #Enter server details below:
-    client=MongoClient('mongodb://z604_final:lanif_406z@45.33.57.4:27017/tweetDB')
+    client=MongoClient('') # Connection String for the database
     db=client["tweetDB"]
     collection = db[collection_name]
     return [tweet for tweet in collection.find({"lang":"en"})]
