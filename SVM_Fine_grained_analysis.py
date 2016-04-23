@@ -6,8 +6,6 @@ from sklearn.svm import SVC
 from sklearn import metrics
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn import cross_validation
-#from sklearn.grid_search import GridSearchCV
-#from sklearn.cross_validation import StratifiedKFold
 import time
 
 start=time.time()
@@ -27,12 +25,7 @@ def ExtractTweets(users,conn,dbname):
     print("Extraction time:\n",(time.time()-start)/60)    
     return td
 
-def Preprocess(td):    
-    hillary=[]
-    bernie=[]
-    kasich=[]
-    trump=[]
-    cruz=[]
+def Preprocess(td):
     
     #Stripping links and user handles
     for i in range(len(td)):
@@ -103,19 +96,19 @@ def SVM_Classifier(Train_data_vc,Train_label,Test_data_vc,Test_label,start):
     #predicted=cross_validation.cross_val_predict(clf,Train_data_vc,Train_label,cv=5)
     predicted=cross_validation.cross_val_predict(clf,Test_data_vc,Test_label,cv=5)
     
-    print "Accuracy score:\n",metrics.accuracy_score(Test_label,predicted)
-    print "Precision score:\n",metrics.precision_score(Test_label,predicted)
-    print "Recall score:\n",metrics.recall_score(Test_label,predicted)
-    print "Classification report:\n",metrics.classification_report(Test_label,predicted)
-    print "Confusion_Marix:\n",metrics.confusion_matrix(Test_label,predicted)
+    print ("Accuracy score:\n",metrics.accuracy_score(Test_label,predicted))
+    print ("Precision score:\n",metrics.precision_score(Test_label,predicted))
+    print ("Recall score:\n",metrics.recall_score(Test_label,predicted))
+    print ("Classification report:\n",metrics.classification_report(Test_label,predicted))
+    print ("Confusion_Marix:\n",metrics.confusion_matrix(Test_label,predicted))
     print("Total time:",(time.time()-start)/60)
     
     '''
-    print "Accuracy score:\n",metrics.accuracy_score(Train_label,predicted)
-    print "Precision score:\n",metrics.precision_score(Train_label,predicted)
-    print "Recall score:\n",metrics.recall_score(Train_label,predicted)
-    print "Classification report:\n",metrics.classification_report(Train_label,predicted)
-    print "Confusion_Marix:\n",metrics.confusion_matrix(Train_label,predicted)
+    print ("Accuracy score:\n",metrics.accuracy_score(Train_label,predicted))
+    print ("Precision score:\n",metrics.precision_score(Train_label,predicted))
+    print ("Recall score:\n",metrics.recall_score(Train_label,predicted))
+    print ("Classification report:\n",metrics.classification_report(Train_label,predicted))
+    print ("Confusion_Marix:\n",metrics.confusion_matrix(Train_label,predicted))
     print("Total time:",(time.time()-start)/60)
     '''
 

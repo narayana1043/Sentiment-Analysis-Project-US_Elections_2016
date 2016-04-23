@@ -6,34 +6,30 @@ from sklearn.svm import SVC
 from sklearn import metrics
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn import cross_validation
-#from sklearn.grid_search import GridSearchCV
-#from sklearn.cross_validation import StratifiedKFold
 import time
 
 start=time.time()
 
-def ExtractTweets(users,conn,dbname):
+def ExtractTweets(presidentialCandidates,conn,dbname):
     #Enter server details below:
     client=MC(conn)
     db=client[dbname]
     #Candidates tweets to extract from MongoDB
-    td=[]
-    #Creating a dictionary to hold all the tweets from the presidential candidates
-    for i in users:
-        collection=db[i]
+    tweetDict=[]
+    #Creating a list of lists to hold all the tweets from the presidential candidates
+    for candidate in presidentialCandidates:
+        collection=db[candidate]
         #We care only for english tweets, hence the language filter
-        td1=[[tweet['text'],i] for tweet in collection.find({"lang":"en"})]
-        td.extend(td1)
-    return td
+        tweetDict.extend([[tweet['text'],candidate] for tweet in collection.find({"lang":"en"})])
+    return tweetDict
 
-def Preprocess(td):    
-    rep=[]
-    dem=[]
-    for i in range(len(td)):
-        td[i][0]=re.sub('\s?http(\w+|:)\W+.+','',td[i][0])
-        td[i][0]=re.sub('@\w+','',td[i][0])
-    rep=[td[i][0] for i in range(len(td)) if td[i][1] in ('realDonaldTrump','tedcruz','JohnKasich')]
-    dem=[td[i][0] for i in range(len(td)) if td[i][1] not in ('realDonaldTrump','tedcruz','JohnKasich')]    
+def Preprocess(tweetDict):
+
+    for i in range(len(tweetDict)):
+        tweetDict[i][0]=re.sub('\s?http(\w+|:)\W+.+','',tweetDict[i][0])
+        tweetDict[i][0]=re.sub('@\w+','',tweetDict[i][0])
+    rep=[tweetDict[i][0] for i in range(len(tweetDict)) if tweetDict[i][1] in ('realDonaldTrump','tedcruz','JohnKasich')]
+    dem=[tweetDict[i][0] for i in range(len(tweetDict)) if tweetDict[i][1] not in ('realDonaldTrump','tedcruz','JohnKasich')]
 
     train_rep_len=int(round(len(rep)*0.70))
     test_rep_len=int(len(rep)-train_rep_len)
@@ -79,24 +75,15 @@ def SVM_Classifier(Train_data_vc,Train_label,Test_data_vc,Test_label,start):
     clf=OneVsRestClassifier(SVC(C=1,kernel='linear',gamma=1,verbose=False,probability=False))
     clf.fit(Train_data_vc,Train_label)
     print("\nClassifier fitted.\n")
-    #predicted=cross_validation.cross_val_predict(clf,Train_data_vc,Train_label,cv=5)
     predicted=cross_validation.cross_val_predict(clf,Test_data_vc,Test_label,cv=5)
     
-    print "Accuracy score:\n",metrics.accuracy_score(Test_label,predicted)
-    print "Precision score:\n",metrics.precision_score(Test_label,predicted)
-    print "Recall score:\n",metrics.recall_score(Test_label,predicted)
-    print "Classification report:\n",metrics.classification_report(Test_label,predicted)
-    print "Confusion_Marix:\n",metrics.confusion_matrix(Test_label,predicted)
+    print ("Accuracy score:\n",metrics.accuracy_score(Test_label,predicted))
+    print ("Precision score:\n",metrics.precision_score(Test_label,predicted))
+    print ("Recall score:\n",metrics.recall_score(Test_label,predicted))
+    print ("Classification report:\n",metrics.classification_report(Test_label,predicted))
+    print ("Confusion_Marix:\n",metrics.confusion_matrix(Test_label,predicted))
     print("Total time:",(time.time()-start)/60)
-    
-    '''
-    print "Accuracy score:\n",metrics.accuracy_score(Train_label,predicted)
-    print "Precision score:\n",metrics.precision_score(Train_label,predicted)
-    print "Recall score:\n",metrics.recall_score(Train_label,predicted)
-    print "Classification report:\n",metrics.classification_report(Train_label,predicted)
-    print "Confusion_Marix:\n",metrics.confusion_matrix(Train_label,predicted)
-    print("Total time:",(time.time()-start)/60)
-    '''
+
 
 users=['HillaryClinton','JohnKasich','SenSanders','realDonaldTrump','tedcruz']
 conn='mongodb://z604_final:lanif_406z@45.33.57.4:27017/tweetDB'
