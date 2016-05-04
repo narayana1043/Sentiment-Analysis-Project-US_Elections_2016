@@ -27,7 +27,7 @@ def ExtractTweets(user,conn,dbname):
 
 sw=set(stopwords.words("english"))
 sw.add("rt")
-# conn_string = "mongodb://z604_final:lanif_406z@45.33.57.4:27017/tweetDB"
+# conn_string =''
 # user_des=ExtractTweets('tweetStream',conn_string,'tweetDB')
 #
 # pickle.dump(user_des, file=open("user_des_tweets", "wb"))
@@ -51,3 +51,4 @@ print("came here")
 dictionary=corpora.Dictionary(user_des)
 corpus=[dictionary.doc2bow(text) for text in user_des]
 ldamodel = models.ldamodel.LdaModel(corpus, num_topics=5, id2word = dictionary, passes=10)
+print(ldamodel.print_topics(num_topics=5))
