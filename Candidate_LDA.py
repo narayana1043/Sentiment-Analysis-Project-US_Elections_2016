@@ -1,6 +1,7 @@
 import re
 from nltk.corpus import stopwords
 from gensim import corpora,models
+from pprint import pprint
 
 def ReadData(filename):
     speech=[]
@@ -17,6 +18,7 @@ def LDA(candidate):
     sw=set(stopwords.words("english"))
     sw.add("rt")
 
+
     for i in range(len(candidate)):
         x=re.findall(r"\w+'?[a-z]",candidate[i])
         x=set([word.lower() for word in x])
@@ -24,21 +26,23 @@ def LDA(candidate):
         
     dictionary=corpora.Dictionary(candidate)
     corpus=[dictionary.doc2bow(text) for text in candidate]
-    ldamodel = models.ldamodel.LdaModel(corpus, num_topics=3, id2word = dictionary)
+    ldamodel = models.ldamodel.LdaModel(corpus, num_topics=10, id2word = dictionary)
     return ldamodel
     
-hillary=ReadData('PAth\clinton.txt')
+hillary=ReadData('Hillary Clinton Calls for Universal Preschool.txt')
 ldahillary=LDA(hillary)
-print(ldahillary.print_topics(num_topics=2))
+pprint(ldahillary.print_topics(num_topics=2))
 
-bernie=ReadData('')
-ldabernie=LDA(bernie)
+# bernie=ReadData('Bernie_Sander_Commencement_Speech.txt')
+# ldabernie=LDA(bernie)
+# pprint(ldabernie.print_topics(num_topics=10))
 
-trump=ReadData('')
-ldatrump=LDA(trump)
-
-cruz=ReadData('')
-ldacruz=LDA(cruz)
-
-kasich=ReadData('')
-ldakasich=LDA(kasich)
+#
+# trump=ReadData('')
+# ldatrump=LDA(trump)
+#
+# cruz=ReadData('')
+# ldacruz=LDA(cruz)
+#
+# kasich=ReadData('')
+# ldakasich=LDA(kasich)
