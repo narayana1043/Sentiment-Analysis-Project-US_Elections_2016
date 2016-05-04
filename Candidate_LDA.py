@@ -29,13 +29,13 @@ def LDA(candidate):
     ldamodel = models.ldamodel.LdaModel(corpus, num_topics=10, id2word = dictionary)
     return ldamodel
     
-hillary=ReadData('Hillary Clinton Calls for Universal Preschool.txt')
-ldahillary=LDA(hillary)
-pprint(ldahillary.print_topics(num_topics=2))
+# hillary=ReadData('Hillary Clinton Calls for Universal Preschool.txt')
+# ldahillary=LDA(hillary)
+# pprint(ldahillary.print_topics(num_topics=2))
 
-# bernie=ReadData('Bernie_Sander_Commencement_Speech.txt')
-# ldabernie=LDA(bernie)
-# pprint(ldabernie.print_topics(num_topics=10))
+bernie=ReadData('bernie.txt')
+ldabernie=LDA(bernie)
+pprint(ldabernie.print_topics(num_topics=10))
 
 #
 # trump=ReadData('')
