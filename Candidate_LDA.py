@@ -29,6 +29,7 @@ def LDA(candidate):
     
 hillary=ReadData('PAth\clinton.txt')
 ldahillary=LDA(hillary)
+print(ldahillary.print_topics(num_topics=2))
 
 bernie=ReadData('')
 ldabernie=LDA(bernie)
